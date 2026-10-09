@@ -13,10 +13,10 @@
 
     :root {
       --blue:       #3C62AA;   /* SJBG logo blue */
-      --blue-dark:  #2A4A8A;   /* deeper brand blue */
-      --navy:       #0A1730;   /* dark section background – pure blue */
-      --navy-light: #102040;   /* slightly lighter dark bg */
-      --navy-deep:  #060D1C;   /* deepest dark */
+      --blue-dark:  #2A4A8A;
+      --navy:       #1A3560;   /* rich royal blue – dark sections */
+      --navy-light: #1E4275;   /* lighter royal blue */
+      --navy-deep:  #0F2545;   /* deepest, replaces near-black */
       --gold:       #C9A84C;
       --gold-light: #E8D5A3;
       --gold-dark:  #A07830;
@@ -60,7 +60,7 @@
     }
 
     nav.scrolled {
-      background: rgba(6, 13, 28, 0.97);
+      background: rgba(15, 37, 64, 0.97);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       padding: 0.9rem 2.5rem;
@@ -199,8 +199,19 @@
       background:
         radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(60,98,170,0.30)  0%, transparent 60%),
         radial-gradient(ellipse 50% 50% at 15% 85%,  rgba(60,98,170,0.15)  0%, transparent 55%),
-        radial-gradient(ellipse 60% 60% at 85% 40%,  rgba(10,24,60,0.8)   0%, transparent 60%),
-        linear-gradient(175deg, #030A18 0%, #0A1730 45%, #0D1C3A 70%, #030A18 100%);
+        radial-gradient(ellipse 60% 60% at 85% 40%,  rgba(15,37,80,0.7)   0%, transparent 60%),
+        linear-gradient(175deg, #0C1E3C 0%, #1A3560 45%, #1E3E6A 70%, #0C1E3C 100%);
+    }
+
+    /* Real photo behind the hero */
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/hero-church.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      opacity: 0.28;
+      mix-blend-mode: luminosity;
     }
 
     /* Subtle stone-like texture via repeating gradient */
@@ -594,28 +605,25 @@
     .about-img-wrap {
       width: 100%;
       aspect-ratio: 4/5;
-      background: linear-gradient(145deg, #091428 0%, #0D1C3A 50%, #060D1C 100%);
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    /* Stained-glass-esque gradient overlay */
-    .stained {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 40% at 30% 20%, rgba(201,168,76,0.15)   0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 70% 70%, rgba(60, 98,170,0.28)   0%, transparent 55%),
-        radial-gradient(ellipse 55% 55% at 50% 40%, rgba(20, 50,130,0.18)   0%, transparent 60%);
+    .about-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
     }
 
-    .about-cross-svg {
-      position: relative;
-      z-index: 2;
-      width: 70px; height: 90px;
-      fill: rgba(201,168,76,0.5);
+    .about-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,53,96,0.65) 0%, rgba(26,53,96,0.1) 60%, transparent 100%);
+      pointer-events: none;
     }
 
     /* Floating stat card */
@@ -702,6 +710,17 @@
       grid-template-rows: auto auto;
       gap: 1.2rem;
     }
+
+    /* Event card photo background */
+    .ev-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.12;
+      transition: opacity 0.4s ease;
+    }
+    .ev-card:hover .ev-card-bg { opacity: 0.22; }
 
     .ev-card {
       background: rgba(255,255,255,0.03);
@@ -820,7 +839,7 @@
 
     .life-card {
       background: var(--cream);
-      padding: 2.5rem 2rem;
+      padding: 0 2rem 2rem;
       position: relative;
       overflow: hidden;
       transition: background 0.3s;
@@ -832,9 +851,33 @@
       width: 3px; height: 0;
       background: var(--gold);
       transition: height 0.45s cubic-bezier(.22,1,.36,1);
+      z-index: 2;
     }
     .life-card:hover { background: var(--white); }
     .life-card:hover::before { height: 100%; }
+
+    /* Photo header for life cards */
+    .life-card-photo {
+      margin: 0 -2rem 1.5rem;
+      height: 170px;
+      overflow: hidden;
+      position: relative;
+    }
+    .life-card-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .life-card:hover .life-card-photo img { transform: scale(1.06); }
+    .life-card-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(26,53,96,0.55) 100%);
+    }
+
+    .life-card .life-icon-box { margin-top: 1.5rem; }
 
     .life-icon-box {
       width: 50px; height: 50px;
@@ -928,9 +971,19 @@
       content: '';
       position: absolute;
       inset: 0;
+      background-image: url('images/hero-prayer.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: 0.18;
+    }
+    #verse::after {
+      content: '';
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(ellipse 60% 80% at 10% 50%, rgba(201,168,76,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 90% 50%, rgba(201,168,76,0.06) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 80% at 10% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(26,53,96,0.55), rgba(26,53,96,0.55));
     }
 
     .verse-wrap {
@@ -1027,7 +1080,7 @@
       background:
         repeating-linear-gradient(0deg,  transparent, transparent 44px, rgba(255,255,255,0.025) 44px, rgba(255,255,255,0.025) 45px),
         repeating-linear-gradient(90deg, transparent, transparent 44px, rgba(255,255,255,0.025) 44px, rgba(255,255,255,0.025) 45px),
-        linear-gradient(135deg, #0A1730, #122040);
+        linear-gradient(135deg, #1A3560, #1E4275);
     }
     .map-pin-group {
       position: relative;
@@ -1236,6 +1289,7 @@
 <!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="hero-bg"></div>
+  <div class="hero-photo"></div>
   <div class="hero-texture"></div>
   <div class="hero-bg-cross"></div>
   <div class="particles" id="particles"></div>
@@ -1316,12 +1370,8 @@
 
     <div class="about-visual reveal-l">
       <div class="about-img-wrap">
-        <div class="stained"></div>
-        <!-- CSS-drawn cross -->
-        <svg class="about-cross-svg" viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg">
-          <rect x="30" y="0"  width="10" height="90"/>
-          <rect x="8"  y="24" width="54" height="10"/>
-        </svg>
+        <img src="images/parish-1.jpg" alt="Église Saint-Jean-Baptiste de Grenelle" class="about-photo">
+        <div class="about-img-overlay"></div>
       </div>
       <!-- Floating stat -->
       <div class="stat-card">
@@ -1395,6 +1445,7 @@
 
       <!-- Featured -->
       <div class="ev-card featured reveal d1">
+        <div class="ev-card-bg" style="background-image:url('images/community.jpg');"></div>
         <div class="ev-date">
           <span class="ev-date-n">9</span>
           <span class="ev-date-m">Oct</span>
@@ -1413,6 +1464,7 @@
 
       <!-- Card 2 -->
       <div class="ev-card reveal d2">
+        <div class="ev-card-bg" style="background-image:url('images/pelerinage.jpg');"></div>
         <div class="ev-date">
           <span class="ev-date-n">13</span>
           <span class="ev-date-m">Oct</span>
@@ -1426,6 +1478,7 @@
 
       <!-- Card 3 -->
       <div class="ev-card reveal d3">
+        <div class="ev-card-bg" style="background-image:url('images/rosary.jpg');"></div>
         <div class="ev-date">
           <span class="ev-date-n" style="font-size:1.3rem; padding:0.2rem 0;">Mens.</span>
           <span class="ev-date-m">Récurrent</span>
@@ -1439,6 +1492,7 @@
 
       <!-- Card 4 -->
       <div class="ev-card reveal d4">
+        <div class="ev-card-bg" style="background-image:url('images/conference.jpg');"></div>
         <div class="ev-date">
           <span class="ev-date-n" style="font-size:1.2rem; padding:0.1rem 0;">Oct</span>
           <span class="ev-date-m">2025</span>
@@ -1452,6 +1506,7 @@
 
       <!-- Card 5 -->
       <div class="ev-card reveal d5">
+        <div class="ev-card-bg" style="background-image:url('images/capture.jpg');"></div>
         <div class="ev-date">
           <span class="ev-date-n" style="font-size:1.2rem; padding:0.1rem 0;">Nov</span>
           <span class="ev-date-m">2025</span>
@@ -1489,31 +1544,55 @@
 
     <div class="life-grid">
       <div class="life-card reveal d1">
+        <div class="life-card-photo">
+          <img src="images/choir.jpg" alt="Chorales SJBG">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">🎵</div>
         <div class="life-name">Chorales &amp; Musique</div>
         <div class="life-desc">Plusieurs chorales accompagnent notre liturgie. Rejoignez-nous pour chanter la louange au Seigneur à chaque messe dominicale.</div>
       </div>
       <div class="life-card reveal d2">
+        <div class="life-card-photo">
+          <img src="images/profession-foi.jpg" alt="Catéchèse SJBG">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">👶</div>
         <div class="life-name">Catéchèse Enfants</div>
         <div class="life-desc">Préparation aux sacrements pour les enfants de 7 à 15 ans, animée par des équipes de catéchistes bénévoles engagés.</div>
       </div>
       <div class="life-card reveal d3">
+        <div class="life-card-photo">
+          <img src="images/community.jpg" alt="Jeunes SJBG">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">🌱</div>
         <div class="life-name">Aumônerie Jeunes</div>
         <div class="life-desc">Mouvements de jeunesse, JMJ, retraites et week-ends pour collégiens, lycéens et étudiants du quartier.</div>
       </div>
       <div class="life-card reveal d4">
+        <div class="life-card-photo">
+          <img src="images/vestiaire.jpg" alt="Le Vestiaire SJBG">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">👕</div>
         <div class="life-name">Le Vestiaire</div>
         <div class="life-desc">Distribution de vêtements aux personnes dans le besoin. Un ministère de charité concret pour les plus pauvres du quartier.</div>
       </div>
       <div class="life-card reveal d5">
+        <div class="life-card-photo">
+          <img src="images/landscape.jpg" alt="Maraudes Antigel">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">❄️</div>
         <div class="life-name">Maraudes Antigel</div>
         <div class="life-desc">Sorties hivernales pour aller à la rencontre des personnes sans-abri et leur apporter vivres, chaleur et fraternité.</div>
       </div>
       <div class="life-card reveal d6">
+        <div class="life-card-photo">
+          <img src="images/rosary.jpg" alt="Adoration SJBG">
+          <div class="life-card-photo-overlay"></div>
+        </div>
         <div class="life-icon-box">🕯️</div>
         <div class="life-name">Adoration &amp; Prière</div>
         <div class="life-desc">Chapelle ouverte, adoration du Saint-Sacrement, groupes de prière et fraternités pour approfondir la vie intérieure.</div>
